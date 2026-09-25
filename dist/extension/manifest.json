@@ -1,9 +1,9 @@
 {
     "manifest_version": 3,
-    "name": "Pocket Bird",
-    "description": "It's a pet bird in your browser, what more could you want?",
-    "version": "2026.7.30",
-    "homepage_url": "https://idreesinc.com",
+    "name": "Pájaros de Cartagena",
+    "description": "Pájaros de Cartagena que revolotean por tu navegador. Basado en Pocket Bird, de Idrees Hassan.",
+    "version": "2026.9.25",
+    "homepage_url": "https://github.com/CasaAmarillaRoja/pajaros-de-cartagena",
     "icons": {
         "48": "images/icons/transparent/48x48x1.png",
         "96": "images/icons/transparent/96x96x1.png",
@@ -35,7 +35,7 @@
     ],
     "browser_specific_settings": {
         "gecko": {
-            "id": "pocket-bird@idreesinc.com",
+            "id": "pajaros-de-cartagena@casaamarillaroja",
             "data_collection_permissions": {
                 "required": [
                     "none"

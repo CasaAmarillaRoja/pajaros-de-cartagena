@@ -1,13 +1,13 @@
 {
-  "name": "birb",
+  "name": "pajaros-de-cartagena",
   "version": "1.0.0",
-  "description": "",
+  "description": "Pájaros de Cartagena que revolotean por Obsidian y el navegador. Basado en Pocket Bird, de Idrees Hassan.",
   "license": "ISC",
   "author": "Idrees Hassan",
   "type": "module",
   "scripts": {
     "build": "node build.js",
-    "dev": "nodemon --watch src --watch package.json --watch stylesheet.css --watch build.js --watch obsidian-manifest.json --watch browser-manifest.json --watch sprites/species.png --exec \"npm run build\"",
+    "dev": "nodemon --watch src --watch package.json --watch stylesheet.css --watch build.js --watch obsidian-manifest.json --watch browser-manifest.json --watch sprites/species.png --watch sprites/birds --exec \"npm run build\"",
     "sprites": "node sprite-builder.js"
   },
   "devDependencies": {

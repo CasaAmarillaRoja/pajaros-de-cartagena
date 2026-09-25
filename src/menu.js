@@ -42,7 +42,7 @@ export class SpinnerMenuItem extends MenuItem {
 
 export class ConditionalMenuItem extends MenuItem {
 	/**
-	 * @param {string} text
+	 * @param {string|(() => string)} text
 	 * @param {() => void} action
 	 * @param {() => boolean} condition
 	 * @param {number[][]} [icon]

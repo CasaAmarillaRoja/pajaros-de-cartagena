@@ -11,6 +11,7 @@ import species from "./src/species.js";
 const BUILD_CACHE_PATH = "./build-cache.json";
 const SRC_DIR = "./src";
 const SPRITES_DIR = "./sprites";
+const BIRDS_DIR = SPRITES_DIR + "/birds";
 const IMAGES_DIR = "./images";
 const FONTS_DIR = "./fonts";
 const DIST_DIR = "./dist";
@@ -40,7 +41,7 @@ const VERSION_KEY = "__VERSION__";
 const STYLESHEET_KEY = "___STYLESHEET___";
 const MONOCRAFT_URL_KEY = "__MONOCRAFT_URL__";
 const CODE_KEY = "__CODE__";
-const BIRB_PIXELS_KEY = "__BIRB_PIXELS__";
+const SPECIES_SPRITES_KEY = "__SPECIES_SPRITES__";
 const FEATHER_PIXELS_KEY = "__FEATHER_PIXELS__";
 const HAT_PIXELS_KEY = "__HAT_PIXELS__";
 const SPECIES_PALETTES_KEY = "__SPECIES_PALETTES__";
@@ -81,9 +82,11 @@ writeFileSync(BUILD_CACHE_PATH, JSON.stringify(buildCache), 'utf8');
  */
 async function generateCode(entryPoint, embedFont = false) {
 	// Generate sprite data
-	const birbImageData = getImageData(SPRITES_DIR + "/birb.png");
+	// birb.png is only the colour template for the feather; each species has its own sheet in true colours
 	const templateMapping = createTemplateMapping(SPRITES_DIR + "/birb.png", 32);
-	const birbPixels = loadSpriteSheetPixels(SPRITES_DIR + "/birb.png", templateMapping);
+	const speciesSprites = Object.fromEntries(
+		Object.keys(species).map((id) => [id, loadSpriteSheetPixels(BIRDS_DIR + "/" + id + ".png", {})])
+	);
 	const featherPixels = loadSpriteSheetPixels(SPRITES_DIR + "/feather.png", templateMapping);
 	const hatPixels = loadSpriteSheetPixels(SPRITES_DIR + "/hats.png", {});
 	const speciesPalettes = Object.fromEntries(
@@ -122,7 +125,7 @@ async function generateCode(entryPoint, embedFont = false) {
 		birbJs = birbJs.replaceAll(MONOCRAFT_URL_KEY, MONOCRAFT_URL);
 	}
 
-	birbJs = birbJs.replace(`"${BIRB_PIXELS_KEY}"`, JSON.stringify(birbPixels));
+	birbJs = birbJs.replace(`"${SPECIES_SPRITES_KEY}"`, JSON.stringify(speciesSprites));
 	birbJs = birbJs.replace(`"${FEATHER_PIXELS_KEY}"`, JSON.stringify(featherPixels));
 	birbJs = birbJs.replace(`"${HAT_PIXELS_KEY}"`, JSON.stringify(hatPixels));
 	birbJs = birbJs.replace(`"${SPECIES_PALETTES_KEY}"`, JSON.stringify(speciesPalettes));

@@ -26,21 +26,58 @@ export class Birb {
 	/** @type {AnimationType} */
 	currentAnimation = Animations.STILL;
 
+	/** @type {Map<string[][], { frames: Record<string, Frame>, animations: Record<AnimationType, Anim> }>} */
+	#animationSets = new Map();
+
 	/**
 	 * @param {number} birbCssScale
 	 * @param {number} canvasPixelSize
-	 * @param {string[][]} spriteSheet The loaded sprite sheet pixel data
 	 * @param {number} spriteWidth
 	 * @param {number} spriteHeight
 	 * @param {string[][]} hatSpriteSheet The loaded hat sprite sheet pixel data
 	 */
-	constructor(birbCssScale, canvasPixelSize, spriteSheet, spriteWidth, spriteHeight, hatSpriteSheet) {
+	constructor(birbCssScale, canvasPixelSize, spriteWidth, spriteHeight, hatSpriteSheet) {
 		this.canvasPixelSize = canvasPixelSize;
 		this.spriteWidth = spriteWidth;
 		this.spriteHeight = spriteHeight;
 
+		// Build hat layers
+		this.hatLayers = createHatLayers(hatSpriteSheet);
+
+		// Create canvas element
+		this.canvas = document.createElement("canvas");
+		this.canvas.id = "birb";
+		this.canvas.width = spriteWidth * canvasPixelSize;
+		this.canvas.height = spriteHeight * canvasPixelSize;
+
+		this.ctx = /** @type {CanvasRenderingContext2D} */ (this.canvas.getContext("2d"));
+
+		// Append to shadow dom
+		getShadowRoot().appendChild(this.canvas);
+	}
+
+	/**
+	 * Build the frames and animations for one species' sprite sheet, caching the result
+	 * @param {BirdType} species
+	 */
+	#getAnimationSet(species) {
+		const spriteSheet = species.getSpriteSheet();
+		let animationSet = this.#animationSets.get(spriteSheet);
+		if (!animationSet) {
+			animationSet = this.#buildAnimationSet(spriteSheet);
+			this.#animationSets.set(spriteSheet, animationSet);
+		}
+		return animationSet;
+	}
+
+	/**
+	 * @param {string[][]} spriteSheet The loaded sprite sheet pixel data
+	 */
+	#buildAnimationSet(spriteSheet) {
+		const hatLayers = this.hatLayers;
+
 		// Build layers from sprite sheet
-		this.layers = {
+		const layers = {
 			base: new Layer(getLayerPixels(spriteSheet, 0, this.spriteWidth)),
 			down: new Layer(getLayerPixels(spriteSheet, 1, this.spriteWidth)),
 			heartOne: new Layer(getLayerPixels(spriteSheet, 2, this.spriteWidth)),
@@ -53,36 +90,33 @@ export class Birb {
 			happyEye: new Layer(getLayerPixels(spriteSheet, 9, this.spriteWidth)),
 		};
 
-		// Build hat layers
-		const hatLayers = createHatLayers(hatSpriteSheet);
-
 		// Build frames from layers
-		this.frames = {
-			base: new Frame([this.layers.base, this.layers.tuftBase, ...hatLayers.base]),
-			headDown: new Frame([this.layers.down, this.layers.tuftDown, ...hatLayers.down]),
-			wingsDown: new Frame([this.layers.base, this.layers.tuftBase, this.layers.wingsDown, ...hatLayers.base]),
-			wingsUp: new Frame([this.layers.down, this.layers.tuftDown, this.layers.wingsUp, ...hatLayers.down]),
-			heartOne: new Frame([this.layers.base, this.layers.tuftBase, this.layers.happyEye, ...hatLayers.base, this.layers.heartOne]),
-			heartTwo: new Frame([this.layers.base, this.layers.tuftBase, this.layers.happyEye, ...hatLayers.base,this.layers.heartTwo]),
-			heartThree: new Frame([this.layers.base, this.layers.tuftBase, this.layers.happyEye, ...hatLayers.base, this.layers.heartThree]),
-			heartFour: new Frame([this.layers.base, this.layers.tuftBase, this.layers.happyEye, ...hatLayers.base, this.layers.heartTwo]),
+		const frames = {
+			base: new Frame([layers.base, layers.tuftBase, ...hatLayers.base]),
+			headDown: new Frame([layers.down, layers.tuftDown, ...hatLayers.down]),
+			wingsDown: new Frame([layers.base, layers.tuftBase, layers.wingsDown, ...hatLayers.base]),
+			wingsUp: new Frame([layers.down, layers.tuftDown, layers.wingsUp, ...hatLayers.down]),
+			heartOne: new Frame([layers.base, layers.tuftBase, layers.happyEye, ...hatLayers.base, layers.heartOne]),
+			heartTwo: new Frame([layers.base, layers.tuftBase, layers.happyEye, ...hatLayers.base, layers.heartTwo]),
+			heartThree: new Frame([layers.base, layers.tuftBase, layers.happyEye, ...hatLayers.base, layers.heartThree]),
+			heartFour: new Frame([layers.base, layers.tuftBase, layers.happyEye, ...hatLayers.base, layers.heartTwo]),
 		};
 
 		// Build animations from frames
-		this.animations = {
-			[Animations.STILL]: new Anim([this.frames.base], [1000]),
+		const animations = {
+			[Animations.STILL]: new Anim([frames.base], [1000]),
 			[Animations.BOB]: new Anim([
-				this.frames.base,
-				this.frames.headDown
+				frames.base,
+				frames.headDown
 			], [
 				420,
 				420
 			]),
 			[Animations.FLYING]: new Anim([
-				this.frames.base,
-				this.frames.wingsUp,
-				this.frames.headDown,
-				this.frames.wingsDown,
+				frames.base,
+				frames.wingsUp,
+				frames.headDown,
+				frames.wingsDown,
 			], [
 				30,
 				80,
@@ -90,14 +124,14 @@ export class Birb {
 				60,
 			]),
 			[Animations.HEART]: new Anim([
-				this.frames.heartOne,
-				this.frames.heartTwo,
-				this.frames.heartThree,
-				this.frames.heartFour,
-				this.frames.heartThree,
-				this.frames.heartFour,
-				this.frames.heartThree,
-				this.frames.heartFour,
+				frames.heartOne,
+				frames.heartTwo,
+				frames.heartThree,
+				frames.heartFour,
+				frames.heartThree,
+				frames.heartFour,
+				frames.heartThree,
+				frames.heartFour,
 			], [
 				60,
 				80,
@@ -110,16 +144,7 @@ export class Birb {
 			], false),
 		};
 
-		// Create canvas element
-		this.canvas = document.createElement("canvas");
-		this.canvas.id = "birb";
-		this.canvas.width = this.frames.base.getPixels()[0].length * canvasPixelSize;
-		this.canvas.height = spriteHeight * canvasPixelSize;
-
-		this.ctx = /** @type {CanvasRenderingContext2D} */ (this.canvas.getContext("2d"));
-
-		// Append to shadow dom
-		getShadowRoot().appendChild(this.canvas);
+		return { frames, animations };
 	}
 
 	/**
@@ -129,7 +154,7 @@ export class Birb {
 	 * @returns {boolean} Whether the animation has completed (for non-looping animations)
 	 */
 	draw(species, hat) {
-		const anim = this.animations[this.currentAnimation];
+		const anim = this.#getAnimationSet(species).animations[this.currentAnimation];
 		return anim.draw(this.ctx, this.direction, this.animStart, this.canvasPixelSize, species.getColorScheme(), [...species.tags, hat || '']);
 	}
 
@@ -151,11 +176,12 @@ export class Birb {
 	}
 
 	/**
-	 * Get the frames object
+	 * Get the frames object for a species
+	 * @param {BirdType} species
 	 * @returns {Record<string, Frame>}
 	 */
-	getFrames() {
-		return this.frames;
+	getFrames(species) {
+		return this.#getAnimationSet(species).frames;
 	}
 
 	/**

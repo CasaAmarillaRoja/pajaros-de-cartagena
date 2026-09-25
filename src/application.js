@@ -85,9 +85,9 @@ const WINDOW_PIXEL_SIZE = CANVAS_PIXEL_SIZE * BIRB_CSS_SCALE;
 
 // Build-time assets
 const STYLESHEET = `___STYLESHEET___`;
-/** @type {string[][]} */
+/** @type {Record<string, string[][]>} */
 // @ts-expect-error
-const BIRB_PIXELS = "__BIRB_PIXELS__";
+const SPECIES_SPRITES = "__SPECIES_SPRITES__";
 /** @type {string[][]} */
 // @ts-expect-error
 const FEATHER_PIXELS = "__FEATHER_PIXELS__";
@@ -104,7 +104,7 @@ const FEATHER_ID = "birb-feather";
 const WARDROBE_ID = "birb-wardrobe";
 const HAT_ID = "birb-hat";
 
-const DEFAULT_BIRD = "bluebird";
+const DEFAULT_BIRD = "mariamulata";
 const DEFAULT_HAT = HAT.NONE;
 
 // Birb movement
@@ -139,15 +139,37 @@ const PET_HAT_BOOST = 1.5;
 const MIN_FOCUS_ELEMENT_WIDTH = 100;
 
 /** @type {Record<string, string>} */
-const SECRET_BIRDS = {
-	"now you see me": "invisible",
-	"🏳️‍🌈": "pride",
-	"🏳️‍⚧️": "trans",
-	"gotta catch em all": "pidgey",
-};
+const SECRET_BIRDS = {};
 
 /** @type {Partial<Settings>} */
 let userSettings = {};
+
+/**
+ * @param {string} text
+ * @returns {string} The text with its first letter in upper case
+ */
+function capitalize(text) {
+	return text.charAt(0).toUpperCase() + text.slice(1);
+}
+
+/**
+ * Turn a species description into DOM nodes, italicising any *scientific names*
+ * @param {string} text
+ * @returns {DocumentFragment}
+ */
+function formatDescription(text) {
+	const fragment = document.createDocumentFragment();
+	text.split("*").forEach((part, index) => {
+		if (index % 2 === 1) {
+			const italic = document.createElement("i");
+			italic.textContent = part;
+			fragment.appendChild(italic);
+		} else if (part) {
+			fragment.appendChild(document.createTextNode(part));
+		}
+	});
+	return fragment;
+}
 
 /** 
  * @param {Context} context
@@ -159,18 +181,17 @@ export async function initializeApplication(context) {
 
 	for (const [id, species] of Object.entries(SPECIES)) {
 		species.setColorScheme(SPECIES_PALETTES[id]);
+		species.setSpriteSheet(SPECIES_SPRITES[id]);
 	}
 	
-	startApplication(BIRB_PIXELS, FEATHER_PIXELS, HAT_PIXELS);
+	startApplication(FEATHER_PIXELS, HAT_PIXELS);
 }
 
 /**
- * @param {string[][]} birbPixels
  * @param {string[][]} featherPixels
  * @param {string[][]} hatsPixels
  */
-function startApplication(birbPixels, featherPixels, hatsPixels) {
-	const SPRITE_SHEET = birbPixels;
+function startApplication(featherPixels, hatsPixels) {
 	const FEATHER_SPRITE_SHEET = featherPixels;
 	const HATS_SPRITE_SHEET = hatsPixels;
 
@@ -191,7 +212,7 @@ function startApplication(birbPixels, featherPixels, hatsPixels) {
 	};
 
 	const menuItems = [
-		new MenuItem(() => `Pet ${birdBirb()}`, pet, [
+		new MenuItem(() => `Acariciar al ${birdBirb()}`, pet, [
 			[0, 1, 1, 0, 1, 1, 0],
 			[1, 0, 0, 1, 0, 0, 1],
 			[1, 0, 0, 0, 0, 0, 1],
@@ -199,7 +220,7 @@ function startApplication(birbPixels, featherPixels, hatsPixels) {
 			[0, 0, 1, 0, 1, 0, 0],
 			[0, 0, 0, 1, 0, 0, 0],
 		]),
-		new MenuItem("Field Guide", insertFieldGuide, [
+		new MenuItem("Guía de campo", insertFieldGuide, [
 			[0, 1, 1, 0, 1, 1, 0],
 			[1, 0, 0, 1, 0, 0, 1],
 			[1, 0, 0, 1, 0, 0, 1],
@@ -207,7 +228,7 @@ function startApplication(birbPixels, featherPixels, hatsPixels) {
 			[1, 0, 0, 1, 0, 0, 1],
 			[1, 1, 1, 0, 1, 1, 1],
 		]),
-		new MenuItem("Wardrobe", insertWardrobe, [
+		new MenuItem("Guardarropa", insertWardrobe, [
 			[0, 1, 1, 0, 1, 1, 0],
 			[1, 0, 0, 1, 0, 0, 1],
 			[1, 1, 0, 0, 0, 1, 1],
@@ -215,7 +236,7 @@ function startApplication(birbPixels, featherPixels, hatsPixels) {
 			[0, 1, 0, 0, 0, 1, 0],
 			[0, 1, 1, 1, 1, 1, 0],
 		]),
-		new ConditionalMenuItem("Sticky Note", () => createNewStickyNote(stickyNotes, save, deleteStickyNote), () => getContext().areStickyNotesEnabled(), [
+		new ConditionalMenuItem("Nota adhesiva", () => createNewStickyNote(stickyNotes, save, deleteStickyNote), () => getContext().areStickyNotesEnabled(), [
 			[0, 0, 1, 1, 1, 1, 0],
 			[0, 1, 0, 0, 0, 1, 0],
 			[1, 0, 0, 1, 0, 1, 0],
@@ -223,7 +244,7 @@ function startApplication(birbPixels, featherPixels, hatsPixels) {
 			[1, 0, 0, 0, 0, 1, 0],
 			[1, 1, 1, 1, 1, 1, 0],
 		]),
-		new MenuItem(() => `Hide ${birdBirb()}`, () => birb.setVisible(false), [
+		new MenuItem(() => `Ocultar al ${birdBirb()}`, () => birb.setVisible(false), [
 			[0, 1, 0, 1, 0, 1, 0],
 			[1, 0, 0, 1, 0, 0, 1],
 			[1, 0, 0, 1, 0, 0, 1],
@@ -231,11 +252,11 @@ function startApplication(birbPixels, featherPixels, hatsPixels) {
 			[0, 1, 0, 0, 0, 1, 0],
 			[0, 0, 1, 1, 1, 0, 0],
 		]),
-		new DebugMenuItem("Freeze", () => {
+		new DebugMenuItem("Congelar", () => {
 			frozen = !frozen;
 		}),
-		new DebugMenuItem("Reset Data", resetSaveData),
-		new DebugMenuItem("Unlock All", () => {
+		new DebugMenuItem("Borrar datos", resetSaveData),
+		new DebugMenuItem("Desbloquear todo", () => {
 			for (let type in SPECIES) {
 				unlockBird(type);
 			}
@@ -244,14 +265,14 @@ function startApplication(birbPixels, featherPixels, hatsPixels) {
 				unlockHat(HAT[hat]);
 			}
 		}),
-		new DebugMenuItem("Add Feather", () => {
+		new DebugMenuItem("Añadir pluma", () => {
 			addFeather();
 		}),
-		new DebugMenuItem("Disable Debug", () => {
+		new DebugMenuItem("Desactivar depuración", () => {
 			setDebug(false);
 		}),
 		new Separator(),
-		new ConditionalMenuItem(`Adopt A ${birdBirb()}`, () => {
+		new ConditionalMenuItem(() => `Adoptar un ${birdBirb()}`, () => {
 			const URL = "https://idreesinc.itch.io/pocket-bird";
 			window.open(URL, "_blank");
 		}, () => getContext().isLinkBackEnabled(), [
@@ -262,7 +283,7 @@ function startApplication(birbPixels, featherPixels, hatsPixels) {
 			[1, 0, 0, 0, 0, 1, 0],
 			[0, 1, 1, 1, 1, 0, 0],
 		]),
-		new MenuItem("Settings", () => switchMenuItems(settingsItems, updateMenuLocation), [
+		new MenuItem("Configuración", () => switchMenuItems(settingsItems, updateMenuLocation), [
 			[0, 0, 0, 0, 1, 1, 1],
 			[1, 1, 1, 1, 1, 0, 1],
 			[0, 0, 0, 0, 1, 1, 1],
@@ -273,12 +294,12 @@ function startApplication(birbPixels, featherPixels, hatsPixels) {
 	];
 
 	const settingsItems = [
-		new MenuItem("Go Back", () => switchMenuItems(menuItems, updateMenuLocation), undefined, false),
+		new MenuItem("Volver", () => switchMenuItems(menuItems, updateMenuLocation), undefined, false),
 		new Separator(),
-		new MenuItem(() => `Rename Your ${birdBirb()}`, () => {
+		new MenuItem(() => `Ponerle nombre al ${birdBirb()}`, () => {
 			requestNewName();
 		}),
-		new SpinnerMenuItem(() => `${birdBirb()} Scale`,
+		new SpinnerMenuItem(() => `Tamaño del ${birdBirb()}`,
 			() => {
 				userSettings.birbScaleMultiplier = 1;
 				save();
@@ -309,7 +330,7 @@ function startApplication(birbPixels, featherPixels, hatsPixels) {
 			save();
 			updateBirbScale();
 		}),
-		new SpinnerMenuItem("UI Scale",
+		new SpinnerMenuItem("Tamaño de la interfaz",
 			() => {
 				userSettings.uiScaleMultiplier = 1;
 				save();
@@ -326,25 +347,25 @@ function startApplication(birbPixels, featherPixels, hatsPixels) {
 			save();
 			updateUIScale();
 		}),
-		new MenuItem(() => `${settings().soundEnabled ? "Disable" : "Enable"} Sound`, () => {
+		new MenuItem(() => `${settings().soundEnabled ? "Desactivar" : "Activar"} el sonido`, () => {
 			userSettings.soundEnabled = !settings().soundEnabled;
 			save();
 		}),
-		new MenuItem(() => `Toggle ${birdBirb(true)} Mode`, () => {
+		new MenuItem(() => `Cambiar a modo ${birdBirb(true)}`, () => {
 			userSettings.birbMode = !settings().birbMode;
 			save();
 			const message = makeElement("birb-message-content");
-			message.appendChild(document.createTextNode(`Your ${birdBirb().toLowerCase()} shall now be referred to as "${birdBirb()}"`));
+			message.appendChild(document.createTextNode(`A partir de ahora diremos «${birdBirb()}» en lugar de «${birdBirb(true)}».`));
 			if (settings().birbMode) {
 				message.appendChild(document.createElement("br"));
 				message.appendChild(document.createElement("br"));
-				message.appendChild(document.createTextNode("Welcome back to 2012"));
+				message.appendChild(document.createTextNode("Bienvenido de nuevo a 2012"));
 			}
-			insertModal(`${birdBirb()} Mode`, message, settings().birbMode ? "radical, dude" : "sounds good");
+			insertModal(`Modo ${birdBirb()}`, message, settings().birbMode ? "¡qué chévere!" : "me parece bien");
 		}),
 		new Separator(),
-		new MenuItem(() => `Source Code ${isPetBoostActive() ? " ❤" : ""}`, () => { window.open("https://github.com/IdreesInc/Pocket-Bird"); }),
-		new MenuItem("Build __VERSION__", () => { alert("Thank you for using Pocket Bird! You are on version: __VERSION__") }, undefined, false),
+		new MenuItem(() => `Código fuente${isPetBoostActive() ? " ❤" : ""}`, () => { window.open("https://github.com/CasaAmarillaRoja/pajaros-de-cartagena"); }),
+		new MenuItem("Versión __VERSION__", () => { alert("¡Gracias por usar Pájaros de Cartagena! Tienes la versión __VERSION__.") }, undefined, false),
 	];
 
 	/** @type {Birb} */
@@ -413,6 +434,10 @@ function startApplication(birbPixels, featherPixels, hatsPixels) {
 
 		userSettings = saveData.settings ?? {};
 		unlockedSpecies = saveData.unlockedSpecies ?? [DEFAULT_BIRD];
+		// Saves from before the species change will not include the new default bird
+		if (!unlockedSpecies.includes(DEFAULT_BIRD)) {
+			unlockedSpecies.push(DEFAULT_BIRD);
+		}
 		currentSpecies = saveData.currentSpecies ?? DEFAULT_BIRD;
 		unlockedHats = saveData.unlockedHats ?? [DEFAULT_HAT];
 		currentHat = saveData.currentHat ?? DEFAULT_HAT;
@@ -484,10 +509,13 @@ function startApplication(birbPixels, featherPixels, hatsPixels) {
 	}
 
 	/**
-	 * Bird or birb, you decide
+	 * Bird or birb, you decide: "pájaro" or "pajarito", lower case so it can sit mid-sentence
+	 * @param {boolean} [invert]
+	 * @param {boolean} [plural]
 	 */
-	function birdBirb(invert = false) {
-		return settings().birbMode !== invert ? "Birb" : "Bird";
+	function birdBirb(invert = false, plural = false) {
+		const word = settings().birbMode !== invert ? "pajarito" : "pájaro";
+		return plural ? word + "s" : word;
 	}
 
 	function init() {
@@ -514,7 +542,7 @@ function startApplication(birbPixels, featherPixels, hatsPixels) {
 		injectStyleElement(STYLESHEET);
 		updateBirbScale();
 		updateUIScale();
-		birb = new Birb(BIRB_CSS_SCALE, CANVAS_PIXEL_SIZE, SPRITE_SHEET, SPRITE_WIDTH, SPRITE_HEIGHT, HATS_SPRITE_SHEET);
+		birb = new Birb(BIRB_CSS_SCALE, CANVAS_PIXEL_SIZE, SPRITE_WIDTH, SPRITE_HEIGHT, HATS_SPRITE_SHEET);
 		birb.setAnimation(Animations.BOB);
 
 		window.addEventListener("scroll", () => {
@@ -542,7 +570,7 @@ function startApplication(birbPixels, featherPixels, hatsPixels) {
 			if (settings().firstTime) {
 				firstTimeSetup();
 			} else {
-				let menuTitle = `${birdBirb().toLowerCase()}OS`;
+				let menuTitle = `${birdBirb().slice(0, -1)}OS`;
 				if (hasName()) {
 					menuTitle = settings().name;
 				}
@@ -872,14 +900,14 @@ function startApplication(birbPixels, featherPixels, hatsPixels) {
 			unlockedSpecies.push(birdType);
 			save();
 			const message = makeElement("birb-message-content");
-			message.appendChild(document.createTextNode("You've found a "));
+			message.appendChild(document.createTextNode("¡Encontraste una pluma de "));
 			const bold = document.createElement("b");
-			bold.textContent = SPECIES[birdType].name;
+			bold.textContent = SPECIES[birdType].name.toLowerCase();
 			message.appendChild(bold);
-			message.appendChild(document.createTextNode(" feather! Use the Field Guide to switch your bird's species."));
+			message.appendChild(document.createTextNode(`! Usa la guía de campo para cambiar la especie de tu ${birdBirb()}.`));
 			removeFieldGuide();
 			if (showMessage) {
-				insertModal("New Bird Unlocked!", message, "love it");
+				insertModal(`¡Nuevo ${birdBirb()} desbloqueado!`, message, "¡me encanta!");
 			}
 		}
 	}
@@ -892,13 +920,13 @@ function startApplication(birbPixels, featherPixels, hatsPixels) {
 			unlockedHats.push(hatId);
 			save();
 			const message = makeElement("birb-message-content");
-			message.appendChild(document.createTextNode("You've unlocked the "));
+			message.appendChild(document.createTextNode("¡Desbloqueaste un accesorio nuevo: "));
 			const bold = document.createElement("b");
-			bold.textContent = HAT_METADATA[hatId].name;
+			bold.textContent = HAT_METADATA[hatId].name.toLowerCase();
 			message.appendChild(bold);
-			message.appendChild(document.createTextNode("! To see all of your unlocked accessories, click the Wardrobe from the menu."));
+			message.appendChild(document.createTextNode("! Para ver todos tus accesorios, abre el guardarropa desde el menú."));
 			removeWardrobe();
-			insertModal("New Hat Found!", message, "good stuff");
+			insertModal("¡Nuevo accesorio!", message, "¡genial!");
 		}
 	}
 
@@ -1014,17 +1042,17 @@ function startApplication(birbPixels, featherPixels, hatsPixels) {
 
 		const familiarLabel = document.createElement("div");
 		familiarLabel.className = "birb-field-guide-section-label";
-		familiarLabel.textContent = `----- Familiar ${birdBirb()}s -----`;
+		familiarLabel.textContent = `----- ${capitalize(birdBirb(false, true))} comunes -----`;
 
 		const uncommonLabel = document.createElement("div");
 		uncommonLabel.className = "birb-field-guide-section-label";
-		uncommonLabel.textContent = `----- Uncommon ${birdBirb()}s -----`;
-		uncommonLabel.title = "Arbitrarily classified birds that are a little harder to find, but worth the wait!";
+		uncommonLabel.textContent = `----- ${capitalize(birdBirb(false, true))} poco comunes -----`;
+		uncommonLabel.title = "Pájaros clasificados arbitrariamente como algo más difíciles de encontrar, ¡pero vale la pena esperarlos!";
 
 		const secretLabel = document.createElement("div");
 		secretLabel.className = "birb-field-guide-section-label";
-		secretLabel.textContent = `----- Secret ${birdBirb()}s -----`;
-		secretLabel.title = "Why wait for Easter to collect easter eggs?";
+		secretLabel.textContent = `----- ${capitalize(birdBirb(false, true))} secretos -----`;
+		secretLabel.title = "¿Para qué esperar a la Pascua para buscar huevos de Pascua?";
 
 		const description = makeElement("birb-field-guide-description");
 		contentContainer.appendChild(familiarLabel);
@@ -1039,7 +1067,7 @@ function startApplication(birbPixels, featherPixels, hatsPixels) {
 
 		const fieldGuide = createWindow(
 			FIELD_GUIDE_ID,
-			"Field Guide",
+			"Guía de campo",
 			contentContainer
 		);
 
@@ -1063,7 +1091,7 @@ function startApplication(birbPixels, featherPixels, hatsPixels) {
 			const spacerTwo = document.createElement("div");
 			spacerTwo.style.height = "0.4em";
 
-			const descText = document.createTextNode(!unlocked ? "Not yet unlocked" : type.description);
+			const descText = !unlocked ? document.createTextNode("Todavía sin desbloquear") : formatDescription(type.description);
 
 			const fragment = document.createDocumentFragment();
 			fragment.appendChild(boldName);
@@ -1089,7 +1117,7 @@ function startApplication(birbPixels, featherPixels, hatsPixels) {
 			if (!speciesCtx) {
 				return;
 			}
-			birb.getFrames().base.draw(speciesCtx, Directions.RIGHT, CANVAS_PIXEL_SIZE, type.getColorScheme(), type.tags);
+			birb.getFrames(type).base.draw(speciesCtx, Directions.RIGHT, CANVAS_PIXEL_SIZE, type.getColorScheme(), type.tags);
 			speciesElement.appendChild(speciesCanvas);
 			let section = familiarBirds;
 			if (type.rarity === RARITY.UNCOMMON) {
@@ -1146,12 +1174,12 @@ function startApplication(birbPixels, featherPixels, hatsPixels) {
 
 		const wardrobe = createWindow(
 			WARDROBE_ID,
-			"Wardrobe",
+			"Guardarropa",
 			contentContainer
 		);
 
 		const generateDescription = (/** @type {string} */ hat) => {
-			const metadata = HAT_METADATA[hat] ?? { name: "Unknown Hat", description: "todo" };
+			const metadata = HAT_METADATA[hat] ?? { name: "Sombrero desconocido", description: "Por hacer" };
 			const unlocked = unlockedHats.includes(hat);
 
 			const boldName = document.createElement("b");
@@ -1160,7 +1188,7 @@ function startApplication(birbPixels, featherPixels, hatsPixels) {
 			const spacer = document.createElement("div");
 			spacer.style.height = "0.3em";
 
-			const descText = document.createTextNode(!unlocked ? "Not yet unlocked" : metadata.description);
+			const descText = document.createTextNode(!unlocked ? "Todavía sin desbloquear" : metadata.description);
 
 			const fragment = document.createDocumentFragment();
 			fragment.appendChild(boldName);
@@ -1184,7 +1212,7 @@ function startApplication(birbPixels, featherPixels, hatsPixels) {
 			if (!hatCtx) {
 				return;
 			}
-			birb.getFrames().base.draw(
+			birb.getFrames(SPECIES[currentSpecies]).base.draw(
 				hatCtx,
 				Directions.RIGHT,
 				CANVAS_PIXEL_SIZE,
@@ -1229,7 +1257,7 @@ function startApplication(birbPixels, featherPixels, hatsPixels) {
 	 */
 	function switchSpecies(type, updateSave = true) {
 		if (!SPECIES[type]) {
-			console.warn(`Species ${type} missing, falling back to bluebird`);
+			console.warn(`Species ${type} missing, falling back to ${DEFAULT_BIRD}`);
 			type = DEFAULT_BIRD;
 		}
 		currentSpecies = type;
@@ -1256,35 +1284,35 @@ function startApplication(birbPixels, featherPixels, hatsPixels) {
 	 */
 	function requestNewName() {
 		const message = makeElement("birb-message-content");
-		let text = `What would you like to name your ${birdBirb().toLowerCase()}?`;
+		let text = `¿Cómo quieres llamar a tu ${birdBirb()}?`;
 		if (settings().firstTime) {
-			text = "Congratulations on adopting your new friend! " + text + "\n (You can always change this later in the settings)";
+			text = "¡Felicidades por adoptar a tu nuevo amigo! " + text + "\n(Puedes cambiarlo cuando quieras en la configuración.)";
 		}
 		message.appendChild(document.createTextNode(text));
 		const input = document.createElement("input");
-		input.placeholder = "Type here...";
+		input.placeholder = "Escribe aquí…";
 		if (settings().name) {
 			input.value = settings().name;
 		}
 		input.maxLength = 25;
 		input.className = "birb-message-input";
 		message.appendChild(input);
-		insertModal(`Name Your Pet`, message, "never mind", "go for it", () => {
+		insertModal("Ponle nombre a tu mascota", message, "mejor no", "¡listo!", () => {
 			const name = input.value.trim();
 			if (name === "") {
-				const confirm = makeElement("birb-message-content", `Your ${birdBirb().toLowerCase()} shall remain nameless for now!`);
-				insertModal(`Name Reset`, confirm, "no worries");
+				const confirm = makeElement("birb-message-content", `¡Tu ${birdBirb()} seguirá sin nombre por ahora!`);
+				insertModal("Nombre borrado", confirm, "no pasa nada");
 				setName(name);
 			} else if (SECRET_BIRDS[name.toLowerCase()] !== undefined) {
 				const speciesId = SECRET_BIRDS[name.toLowerCase()];
 				unlockBird(speciesId, false);
-				const confirm = makeElement("birb-message-content", `Well done, you've unlocked a secret ${birdBirb().toLowerCase()}! Check the field guide to see your new discovery.`);
-				insertModal(`Easter Egg`, confirm, "oh dang");
-			} else if (name === "open sesame") {
+				const confirm = makeElement("birb-message-content", `¡Bien hecho! Desbloqueaste un ${birdBirb()} secreto. Abre la guía de campo para ver tu nuevo hallazgo.`);
+				insertModal("Huevo de Pascua", confirm, "¡caramba!");
+			} else if (name === "open sesame" || name.toLowerCase() === "ábrete sésamo") {
 				setDebug(true);
 			} else {
-				const confirm = makeElement("birb-message-content", `Great choice, your ${birdBirb().toLowerCase()} shall now be known as ${name}!`);
-				insertModal(`Name Confirmed`, confirm, "nice");
+				const confirm = makeElement("birb-message-content", `¡Buena elección! A partir de ahora, tu ${birdBirb()} se llamará ${name}.`);
+				insertModal("Nombre confirmado", confirm, "¡perfecto!");
 				setName(name);
 			}
 		});

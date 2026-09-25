@@ -1,114 +1,96 @@
-# Pocket Bird
+# Pájaros de Cartagena
 
-![License](https://img.shields.io/github/license/IdreesInc/Pocket-Bird)
-[![Chrome Web Store Version](https://img.shields.io/chrome-web-store/v/lbbdngkbbgaecefacpnhnhleggabghak)](https://chromewebstore.google.com/detail/pocket-bird/lbbdngkbbgaecefacpnhnhleggabghak)
-[![Mozilla Add-on Version](https://img.shields.io/amo/v/pocket-bird)](https://addons.mozilla.org/en-US/firefox/addon/pocket-bird/)
-[![Discord](https://img.shields.io/discord/1398471368403583120?logo=discord&logoColor=fff&label=discord&color=5865F2)](https://discord.gg/6yxE9prcNc)
+![La mariamulata, el golero, la guacamaya y la lechuza](images/pajaros-de-cartagena.png)
 
-![](images/preview.png)
+Cuatro pájaros de Cartagena de Indias, dibujados píxel a píxel, que saltan y vuelan por tus notas de Obsidian y por las páginas web que visitas.
 
-It's a pet bird that hops around your computer, what more could you want?
+## Los pájaros
 
-### Get it for [Google Chrome](https://chromewebstore.google.com/detail/pocket-bird/lbbdngkbbgaecefacpnhnhleggabghak) 
+| | Pájaro | Especie | Cómo se consigue |
+|---|---|---|---|
+| ![Mariamulata](images/pajaros/mariamulata.png) | Mariamulata | *Quiscalus mexicanus* | Te acompaña desde el principio |
+| ![Golero](images/pajaros/golero.png) | Golero | *Coragyps atratus* | Pluma común |
+| ![Lechuza](images/pajaros/lechuza.png) | Lechuza | *Tyto alba* | Pluma común |
+| ![Guacamaya](images/pajaros/guacamaya.png) | Guacamaya | *Ara macao* | Pluma poco común |
 
-### Get it for [Mozilla Firefox](https://addons.mozilla.org/en-US/firefox/addon/pocket-bird/)
+## Qué hace
 
-### Get it for [Obsidian](https://community.obsidian.md/plugins/pocket-bird)
+- Tu pájaro salta por la pantalla y vuela de un elemento a otro de la página.
+- Puedes acariciarlo, ponerle nombre y vestirlo con once sombreros, gorros y cascos.
+- De vez en cuando cae una pluma: si la atrapas, desbloqueas un pájaro nuevo en la guía de campo.
+- Puedes dejar notas adhesivas que siguen ahí aunque recargues la página.
+- No recopila datos: todo se guarda en tu equipo.
 
-### Get it for [TamperMonkey](https://github.com/IdreesInc/Pocket-Bird#Userscript)
-
-#### Join the [Discord](https://discord.gg/6yxE9prcNc) to help me beta test new features and suggest ideas!
-
-## Features
-
-- A cute little pixel art bird hops around your apps and websites
-- Runs in your browser, so you can use it anywhere including at work or school
-- Catch rare falling feathers to unlock over 30+ different species of birds
-- Find over a dozen adorable hats for your bird to wear
-- Create sticky notes that stay on the page even after you refresh
-- It's all powered by open-source code written by hand
-- And most importantly, you can pet the bird!
-
-![](images/pocket-bird-on-code-block.gif)
-
-## Adoption Guide
-
-### Google Chrome + Microsoft Edge
-
-1. Go to the [Chrome Web Store page](https://chromewebstore.google.com/detail/pocket-bird/lbbdngkbbgaecefacpnhnhleggabghak)
-2. Click "Add to Chrome" (or "Add to Edge" if using Microsoft Edge)
-3. Confirm any permission prompts that appear
-
-### Mozilla Firefox
-1. Go to the [Mozilla Add-ons page](https://addons.mozilla.org/en-US/firefox/addon/pocket-bird/)
-2. Click "Add to Firefox"
-3. Confirm any permission prompts that appear
+## Instalación
 
 ### Obsidian
 
-1. Go to the [Obsidian Plugins page](https://community.obsidian.md/plugins/pocket-bird)
-2. Click "Add to Obsidian"
-3. Once your Obsidian app opens, click "Install" on the Pocket Bird plugin
-4. Click "Enable" and now you're ready to go!
+Todavía no está en el directorio de complementos de Obsidian, así que se instala a mano:
 
-### Userscript
+1. Dentro de tu bóveda, crea la carpeta `.obsidian/plugins/pajaros-de-cartagena`.
+2. Copia en ella los archivos `main.js` y `manifest.json` de [`dist/obsidian`](dist/obsidian).
+3. Reinicia Obsidian, ve a los ajustes de complementos de la comunidad y activa «Pájaros de Cartagena».
 
-*Note that this is mainly used for beta testing new features, installation via browser extension is recommended for the best experience.*
+Si tienes instalado el Pocket Bird original, desactívalo para no tener dos pájaros a la vez.
 
-1. Install [Tampermonkey](https://www.tampermonkey.net/) on your web browser
-2. Enable the Tampermonkey extension and give it the permissions requested
-3. Install my Pocket Bird script by going to this link and clicking install: [https://github.com/IdreesInc/Pocket-Bird/raw/refs/heads/main/dist/userscript/birb.user.js](https://github.com/IdreesInc/Pocket-Bird/raw/refs/heads/main/dist/userscript/birb.user.js)
-4. Now any websites you visit will have a little bird hopping around!
+### Chrome y Edge
 
-### Your Own Website
+1. Descarga este repositorio y descomprímelo.
+2. Abre `chrome://extensions` (en Edge, `edge://extensions`) y activa el modo de desarrollador.
+3. Carga la extensión sin empaquetar y elige la carpeta `dist/extension`.
 
-Pocket Bird can also be embedded directly into your own website! Just include the following code snippet anywhere in your HTML:
+### Firefox
+
+1. Abre `about:debugging#/runtime/this-firefox`.
+2. Carga un complemento temporal y elige el archivo `dist/extension/manifest.json`.
+
+Firefox lo retira al cerrarse. Para dejarlo instalado de forma permanente hay que firmarlo antes en addons.mozilla.org.
+
+### Tampermonkey
+
+Con [Tampermonkey](https://www.tampermonkey.net/) instalado, abre este enlace y confirma la instalación: [birb.user.js](https://github.com/CasaAmarillaRoja/pajaros-de-cartagena/raw/refs/heads/main/dist/userscript/birb.user.js).
+
+### En tu propia web
+
+Añade esta línea en cualquier parte de tu HTML:
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/IdreesInc/Pocket-Bird@main/dist/web/birb.embed.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/CasaAmarillaRoja/pajaros-de-cartagena@main/dist/web/birb.embed.js"></script>
 ```
 
-## FAQ
+## Preguntas frecuentes
 
-### How do I pet the bird?
+### ¿Cómo acaricio a mi pájaro?
 
-Simply move your cursor back and forth over your bird until a heart appears! You can also click the bird to open the menu and pet it from there. There may even be a slightly greater chance of finding a feather when your bird is well loved...
+Pasa el cursor por encima de él, de un lado a otro, hasta que aparezca un corazón. También puedes hacer clic en él y elegir «Acariciar al pájaro».
 
-### How do I collect feathers?
+### ¿Cómo consigo plumas?
 
-Feathers will occasionally fall from the top of your window. Clicking on a feather will add a new species to your field guide, allowing you to change the appearance of your pet!
+Mientras la ventana está activa, de vez en cuando cae una pluma desde la parte de arriba. Haz clic en ella para añadir su pájaro a la guía de campo. Después de acariciar a tu pájaro, durante cinco minutos es el doble de probable que caiga una.
 
-### How do I change my bird's appearance?
+### ¿Cómo cambio de pájaro?
 
-Once you've unlocked new species by collecting feathers, you can change your bird's appearance by opening the Pocket Bird menu (via clicking the bird) and selecting "Field Guide".
+Haz clic en tu pájaro, abre la guía de campo y elige uno de los que ya hayas desbloqueado.
 
-### How do I add sticky notes?
+### ¿Cómo lo escondo?
 
-Open the Pocket Bird menu by clicking the bird and select "Sticky Note". From there, you can add, edit, and delete notes that will stay on the page even after refreshing.
+Haz clic en él y elige «Ocultar al pájaro». Vuelve a aparecer cuando recargas la página.
 
-### How do I hide the bird?
+## Compilar
 
-Open the Pocket Bird menu by clicking the bird and select "Settings". From there, you can toggle the bird's visibility on and off temporarily on the current page.
+```bash
+npm install
+npm run build
+```
 
-### Why does Pocket Bird need permission to read and change my data on websites I visit?
+La compilación deja en `dist/` las versiones para Obsidian, el navegador, Tampermonkey y la web.
 
-If you are running Pocket bird on a browser, the extension needs these permissions in order to insert the bird and sticky notes into your webpages. Pocket Bird does not collect any of your data or browsing history and all data is stored locally on your device!
+Cada pájaro tiene su propia hoja de *sprites* en `sprites/birds/`: diez fotogramas de 32 × 32 píxeles, en este orden: base, cabeza baja, tres corazones, dos huecos para el copete (sin uso), alas arriba, alas abajo y ojos felices. Las alas y los ojos felices son capas que se superponen al fotograma base o al de cabeza baja. Los colores de la pluma de cada pájaro están en `sprites/species.png`.
 
-## Sites With Pocket Bird
+## Créditos
 
-Here are some websites where you can find Pocket Bird hopping around:
+Pájaros de Cartagena es una bifurcación de [Pocket Bird](https://github.com/IdreesInc/Pocket-Bird), creado por [Idrees Hassan](https://idreesinc.com). Suyos son el código original, los sombreros, los corazones, la pluma y la fuente [Monocraft](https://github.com/IdreesInc/Monocraft). En esta versión los pájaros son nuevos, la interfaz está en español y cada especie tiene su propia hoja de *sprites*.
 
-- [https://grepjason.sh](https://grepjason.sh)
-- [https://binarydigit.net](https://binarydigit.net)
-- [https://melvinsalas.com](https://melvinsalas.com)
-- [https://vijaysvibes.uk](https://vijaysvibes.uk)
-- [https://idreesinc.com](https://idreesinc.com)
+Se distribuye con la misma licencia que el original: [Mozilla Public License 2.0](LICENSE).
 
-*If you've added Pocket Bird to your website, let me know and I'll add it to this list!*
-
-
-## Getting in Touch
-
-If you'd like to get in touch, check out the [Discord](https://discord.gg/6yxE9prcNc) to suggest features, report bugs, and stay updated on development!
-
-Also feel free to check out my other open-source projects like [Monocraft](https://github.com/IdreesInc/Monocraft), [PicoChat](https://github.com/IdreesInc/PicoChat), and more on [my website](https://idreesinc.com/)!
+Las descripciones de la guía de campo se basan en artículos de Wikipedia en español ([*Quiscalus mexicanus*](https://es.wikipedia.org/wiki/Quiscalus_mexicanus), [*Coragyps atratus*](https://es.wikipedia.org/wiki/Coragyps_atratus), [*Ara macao*](https://es.wikipedia.org/wiki/Ara_macao) y [*Tyto alba*](https://es.wikipedia.org/wiki/Tyto_alba)), publicados con licencia [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.es). El origen taíno de la palabra está tomado de la entrada [*guacamayo*](https://dle.rae.es/guacamayo) del *Diccionario de la lengua española*, que recoge *guacamaya* como sinónimo.

@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name         Pocket Bird
-// @namespace    https://idreesinc.com
+// @name         Pájaros de Cartagena
+// @namespace    https://github.com/CasaAmarillaRoja
 // @version      __VERSION__
-// @description  It's a pet bird in your browser, what more could you want?
-// @author       Idrees
-// @downloadURL  https://github.com/IdreesInc/Pocket-Bird/raw/refs/heads/main/dist/userscript/birb.user.js
-// @updateURL    https://github.com/IdreesInc/Pocket-Bird/raw/refs/heads/main/dist/userscript/birb.user.js
+// @description  Pájaros de Cartagena que revolotean por tu navegador. Basado en Pocket Bird, de Idrees Hassan.
+// @author       CasaAmarillaRoja (basado en Pocket Bird, de Idrees Hassan)
+// @downloadURL  https://github.com/CasaAmarillaRoja/pajaros-de-cartagena/raw/refs/heads/main/dist/userscript/birb.user.js
+// @updateURL    https://github.com/CasaAmarillaRoja/pajaros-de-cartagena/raw/refs/heads/main/dist/userscript/birb.user.js
 // @match        *://*/*
 // @grant        GM_setValue
 // @grant        GM_getValue

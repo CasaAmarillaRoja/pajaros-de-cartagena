@@ -23,52 +23,52 @@ export const HAT = {
 /** @type {{ [hatId: string]: { name: string, description: string } }} */
 export const HAT_METADATA = {
 	[HAT.NONE]: {
-		name: "Invisible Hat",
-		description: "It's like you're wearing nothing at all!"
+		name: "Sombrero invisible",
+		description: "¡Es como no llevar nada puesto!"
 	},
 	[HAT.TOP_HAT]: {
-		name: "Top Hat",
-		description: "The mark of a true gentlebird."
+		name: "Sombrero de copa",
+		description: "La seña de identidad de todo un caballero con plumas."
 	},
 	[HAT.VIKING_HELMET]: {
-		name: "Viking Helmet",
-		description: "Sure, vikings never actually wore this style of helmet, but why let facts get in the way of good fashion?"
+		name: "Casco vikingo",
+		description: "Es cierto que los vikingos nunca llevaron cascos así, pero ¿por qué dejar que los hechos estropeen la buena moda?"
 	},
 	[HAT.COWBOY_HAT]: {
-		name: "Cowboy Hat",
-		description: "You can't jam with the console cowboys without the appropriate attire."
+		name: "Sombrero de vaquero",
+		description: "No puedes unirte a los vaqueros de consola sin el atuendo adecuado."
 	},
 	[HAT.FEZ]: {
 		name: "Fez",
-		description: "It's a fez. Fezzes are cool."
+		description: "Es un fez. Llevar fez es lo máximo."
 	},
 	[HAT.WIZARD_HAT]: {
-		name: "Wizard Hat",
-		description: "Grants the bearer terrifying mystical power, but luckily birds only use it to summon old ladies with bread crumbs."
+		name: "Sombrero de mago",
+		description: "Otorga a quien lo lleva un poder místico aterrador, pero por suerte los pájaros solo lo usan para invocar abuelitas con migas de pan."
 	},
 	[HAT.BASEBALL_CAP]: {
-		name: "Baseball Cap",
-		description: "Birds unfortunately only ever hit 'fowl' balls..."
+		name: "Gorra de béisbol",
+		description: "Los pájaros no batean muy bien, pero nadie les gana robando bases."
 	},
 	[HAT.FLOWER_HAT]: {
-		name: "Flower Hat",
-		description: "To be fair, this is less of a hat and more of a dirt clod that your pet happened to pick up."
+		name: "Sombrero de flores",
+		description: "A decir verdad, más que un sombrero es un terrón que tu mascota recogió por ahí."
 	},
 	[HAT.BEANIE]: {
-		name: "Beanie",
-		description: "Keeps feathers warm on those long migrations south!"
+		name: "Gorro de lana",
+		description: "¡Mantiene las plumas calientes durante las largas migraciones!"
 	},
 	[HAT.SUN_HAT]: {
-		name: "Sun Hat",
-		description: "Perfect for frolicking through enchanted flower fields."
+		name: "Sombrero para el sol",
+		description: "Perfecto para retozar por campos de flores encantados."
 	},
 	[HAT.STRAW_HAT]: {
-		name: "Straw Hat",
-		description: "A classic design, though keep away from water as this particular hat is seemingly unable to float."
+		name: "Sombrero de paja",
+		description: "Un diseño clásico, aunque conviene mantenerlo lejos del agua: al parecer, este sombrero no flota."
 	},
 	[HAT.CORDOVAN_HAT]: {
-		name: "Cordovan Hat",
-		description: "A traditional Spanish hat that stays put even in the wildest of sword fights."
+		name: "Sombrero cordobés",
+		description: "Un sombrero tradicional español que no se mueve ni en los duelos de espadas más feroces."
 	}
 };
 

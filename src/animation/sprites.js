@@ -48,6 +48,23 @@ export class BirdType {
 		}
 		return this.colorScheme;
 	}
+
+	/**
+	 * @param {string[][]} spriteSheet
+	 */
+	setSpriteSheet(spriteSheet) {
+		this.spriteSheet = spriteSheet;
+	}
+
+	/**
+	 * @returns {string[][]}
+	 */
+	getSpriteSheet() {
+		if (!this.spriteSheet) {
+			throw new Error("Sprite sheet requested before generation");
+		}
+		return this.spriteSheet;
+	}
 }
 
 /** @type {Record<string, BirdType>} */

@@ -47,7 +47,7 @@ export function renderStickyNote(stickyNote, page, onSave, onDelete) {
 	
 	// Create header
 	const header = makeElement("birb-window-header");
-	const titleDiv = makeElement("birb-window-title", "Sticky Note");
+	const titleDiv = makeElement("birb-window-title", "Nota adhesiva");
 	const closeButton = makeElement("birb-window-close", "x");
 	header.appendChild(titleDiv);
 	header.appendChild(closeButton);
@@ -57,7 +57,7 @@ export function renderStickyNote(stickyNote, page, onSave, onDelete) {
 	const textarea = document.createElement("textarea");
 	textarea.className = "birb-sticky-note-input";
 	textarea.style.width = "150px";
-	textarea.placeholder = "Write your notes here and they'll stick to the page!";
+	textarea.placeholder = "Escribe aquí tus notas y se quedarán pegadas en la página.";
 	textarea.value = stickyNote.content;
 	content.appendChild(textarea);
 	
@@ -76,7 +76,7 @@ export function renderStickyNote(stickyNote, page, onSave, onDelete) {
 
 	if (closeButton) {
 		makeClosable(() => {
-			if (stickyNote.content.trim() === "" || confirm("Are you sure you want to delete this sticky note?")) {
+			if (stickyNote.content.trim() === "" || confirm("¿Seguro que quieres borrar esta nota adhesiva?")) {
 				onDelete();
 				noteElement.remove();
 			}
