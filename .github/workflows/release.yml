@@ -1,0 +1,66 @@
+name: Release
+
+# Builds the plugin and attaches the release files whenever a release is published.
+# Run it by hand (Actions → Release → Run workflow) to fill in a release that already exists.
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag to build and attach files to (e.g. 1.0.0)"
+        required: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    env:
+      TAG: ${{ github.event.release.tag_name || inputs.tag }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.TAG }}
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+          cache: npm
+
+      - name: Build
+        run: |
+          npm ci
+          npm run build
+
+      - name: Check the tag matches the plugin version
+        run: |
+          version=$(node -p "require('./dist/obsidian/manifest.json').version")
+          if [ "$version" != "$TAG" ]; then
+            echo "::error::Tag $TAG does not match version $version in manifest.json. Obsidian needs them to be identical."
+            exit 1
+          fi
+
+      - name: Collect release files
+        run: |
+          mkdir release
+          cp dist/obsidian/main.js dist/obsidian/manifest.json release/
+          cp dist/extension.zip dist/userscript/birb.user.js release/
+          ls -l release
+
+      - name: Generate artifact attestation
+        uses: actions/attest@v4
+        with:
+          subject-path: |
+            release/main.js
+            release/manifest.json
+            release/extension.zip
+            release/birb.user.js
+
+      - name: Attach files to the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release upload "$TAG" release/* --clobber
