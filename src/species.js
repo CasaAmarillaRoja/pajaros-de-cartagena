@@ -7,6 +7,7 @@
  * @property {string} highlightColor
  * @property {string[]} [tags]
  * @property {string} [rarity]
+ * @property {string} [hint] Shown in the Field Guide while the species is still locked
  */
 
 // Each species is drawn from its own sprite sheet at sprites/birds/<id>.png
@@ -19,7 +20,7 @@ const species = {
     "latinName": "Quiscalus mexicanus",
     "url": "https://es.wikipedia.org/wiki/Quiscalus_mexicanus",
     "spriteIndex": 0,
-    "highlightColor": "#5a52b8"
+    "highlightColor": "#4b3c9c"
   },
   "golero": {
     "name": "Golero",
@@ -45,6 +46,16 @@ const species = {
     "url": "https://es.wikipedia.org/wiki/Tyto_alba",
     "spriteIndex": 3,
     "highlightColor": "#d9a45a"
+  },
+  "cuervo": {
+    "name": "Cuervo",
+    "description": "Ave paseriforme de la familia Corvidae presente en casi todo el hemisferio norte. Edgar Allan Poe lo convirtió en el mensajero sobrenatural de «El cuervo», poema publicado en 1845 en el que el pájaro, posado sobre un busto de Palas Atenea, repite una y otra vez «Nunca más».",
+    "latinName": "Corvus corax",
+    "url": "https://es.wikipedia.org/wiki/Corvus_corax",
+    "spriteIndex": 4,
+    "highlightColor": "#3c3b5c",
+    "rarity": "poe",
+    "hint": "Pista: ¿qué repite el cuervo de Poe? Ponle ese nombre a tu pájaro."
   },
 }
 

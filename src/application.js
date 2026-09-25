@@ -139,7 +139,11 @@ const PET_HAT_BOOST = 1.5;
 const MIN_FOCUS_ELEMENT_WIDTH = 100;
 
 /** @type {Record<string, string>} */
-const SECRET_BIRDS = {};
+const SECRET_BIRDS = {
+	"nunca más": "cuervo",
+	"nunca mas": "cuervo",
+	"nevermore": "cuervo",
+};
 
 /** @type {Partial<Settings>} */
 let userSettings = {};
@@ -1038,6 +1042,7 @@ function startApplication(featherPixels, hatsPixels) {
 		const contentContainer = document.createElement("div");
 		const familiarBirds = makeElement("birb-grid-content");
 		const uncommonBirds = makeElement("birb-grid-content");
+		const poeBirds = makeElement("birb-grid-content");
 		const secretBirds = makeElement("birb-grid-content");
 
 		const familiarLabel = document.createElement("div");
@@ -1049,6 +1054,10 @@ function startApplication(featherPixels, hatsPixels) {
 		uncommonLabel.textContent = `----- ${capitalize(birdBirb(false, true))} poco comunes -----`;
 		uncommonLabel.title = "Pájaros clasificados arbitrariamente como algo más difíciles de encontrar, ¡pero vale la pena esperarlos!";
 
+		const poeLabel = document.createElement("div");
+		poeLabel.className = "birb-field-guide-section-label";
+		poeLabel.textContent = "----- Edgar Allan Poe -----";
+
 		const secretLabel = document.createElement("div");
 		secretLabel.className = "birb-field-guide-section-label";
 		secretLabel.textContent = `----- ${capitalize(birdBirb(false, true))} secretos -----`;
@@ -1059,6 +1068,8 @@ function startApplication(featherPixels, hatsPixels) {
 		contentContainer.appendChild(familiarBirds);
 		contentContainer.appendChild(uncommonLabel);
 		contentContainer.appendChild(uncommonBirds);
+		contentContainer.appendChild(poeLabel);
+		contentContainer.appendChild(poeBirds);
 		if (hasUnlockedSecrets()) {
 			contentContainer.appendChild(secretLabel);
 			contentContainer.appendChild(secretBirds);
@@ -1091,7 +1102,7 @@ function startApplication(featherPixels, hatsPixels) {
 			const spacerTwo = document.createElement("div");
 			spacerTwo.style.height = "0.4em";
 
-			const descText = !unlocked ? document.createTextNode("Todavía sin desbloquear") : formatDescription(type.description);
+			const descText = !unlocked ? document.createTextNode(type.hint ? `Todavía sin desbloquear. ${type.hint}` : "Todavía sin desbloquear") : formatDescription(type.description);
 
 			const fragment = document.createDocumentFragment();
 			fragment.appendChild(boldName);
@@ -1122,6 +1133,8 @@ function startApplication(featherPixels, hatsPixels) {
 			let section = familiarBirds;
 			if (type.rarity === RARITY.UNCOMMON) {
 				section = uncommonBirds;
+			} else if (type.rarity === RARITY.POE) {
+				section = poeBirds;
 			} else if (type.rarity === RARITY.SECRET) {
 				if (!unlocked) {
 					continue;
@@ -1303,8 +1316,8 @@ function startApplication(featherPixels, hatsPixels) {
 				const confirm = makeElement("birb-message-content", `¡Tu ${birdBirb()} seguirá sin nombre por ahora!`);
 				insertModal("Nombre borrado", confirm, "no pasa nada");
 				setName(name);
-			} else if (SECRET_BIRDS[name.toLowerCase()] !== undefined) {
-				const speciesId = SECRET_BIRDS[name.toLowerCase()];
+			} else if (SECRET_BIRDS[name.toLowerCase().normalize("NFC")] !== undefined) {
+				const speciesId = SECRET_BIRDS[name.toLowerCase().normalize("NFC")];
 				unlockBird(speciesId, false);
 				const confirm = makeElement("birb-message-content", `¡Bien hecho! Desbloqueaste un ${birdBirb()} secreto. Abre la guía de campo para ver tu nuevo hallazgo.`);
 				insertModal("Huevo de Pascua", confirm, "¡caramba!");

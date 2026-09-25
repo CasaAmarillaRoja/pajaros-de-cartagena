@@ -4,6 +4,7 @@ import species from "../species.js"
 export const RARITY = Object.freeze(/** @type {const} */ ({
 	COMMON: "common",
 	UNCOMMON: "uncommon",
+	POE: "poe",
 	SECRET: "secret"
 }));
 
@@ -19,8 +20,9 @@ export class BirdType {
 	 * @param {string} highlightColor
 	 * @param {string[]} [tags]
 	 * @param {Rarity} [rarity]
+	 * @param {string} [hint]
 	 */
-	constructor(name, description, latinName, url, spriteIndex, highlightColor, tags = [], rarity = RARITY.COMMON) {
+	constructor(name, description, latinName, url, spriteIndex, highlightColor, tags = [], rarity = RARITY.COMMON, hint = "") {
 		this.name = name;
 		this.description = description;
 		this.latinName = latinName;
@@ -30,6 +32,7 @@ export class BirdType {
 		this.tags = tags;
 		/** @type {Rarity} */
 		this.rarity = rarity;
+		this.hint = hint;
 	}
 
 	/**
@@ -71,6 +74,6 @@ export class BirdType {
 export const SPECIES = Object.fromEntries(
 	Object.entries(species).map(([id, data]) => [
 		id,
-		new BirdType(data.name, data.description, data.latinName, data.url, data.spriteIndex, data.highlightColor, data.tags, /** @type {Rarity|undefined} */ (data.rarity))
+		new BirdType(data.name, data.description, data.latinName, data.url, data.spriteIndex, data.highlightColor, data.tags, /** @type {Rarity|undefined} */ (data.rarity), data.hint)
 	]),
 );

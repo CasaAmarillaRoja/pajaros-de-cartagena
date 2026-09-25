@@ -2,7 +2,7 @@
 
 ![La mariamulata, el golero, la guacamaya y la lechuza](images/pajaros-de-cartagena.png)
 
-Cuatro pájaros de Cartagena de Indias, dibujados píxel a píxel, que saltan y vuelan por tus notas de Obsidian y por las páginas web que visitas.
+Cuatro pájaros de Cartagena de Indias, dibujados píxel a píxel, que saltan y vuelan por tus notas de Obsidian y por las páginas web que visitas. Y un invitado secreto: el cuervo de Edgar Allan Poe.
 
 ## Los pájaros
 
@@ -12,6 +12,7 @@ Cuatro pájaros de Cartagena de Indias, dibujados píxel a píxel, que saltan y 
 | ![Golero](images/pajaros/golero.png) | Golero | *Coragyps atratus* | Pluma común |
 | ![Lechuza](images/pajaros/lechuza.png) | Lechuza | *Tyto alba* | Pluma común |
 | ![Guacamaya](images/pajaros/guacamaya.png) | Guacamaya | *Ara macao* | Pluma poco común |
+| ![Cuervo](images/pajaros/cuervo.png) | Cuervo | *Corvus corax* | Secreto: la pista está en la guía de campo |
 
 ## Qué hace
 
@@ -93,4 +94,4 @@ Pájaros de Cartagena es una bifurcación de [Pocket Bird](https://github.com/Id
 
 Se distribuye con la misma licencia que el original: [Mozilla Public License 2.0](LICENSE).
 
-Las descripciones de la guía de campo se basan en artículos de Wikipedia en español ([*Quiscalus mexicanus*](https://es.wikipedia.org/wiki/Quiscalus_mexicanus), [*Coragyps atratus*](https://es.wikipedia.org/wiki/Coragyps_atratus), [*Ara macao*](https://es.wikipedia.org/wiki/Ara_macao) y [*Tyto alba*](https://es.wikipedia.org/wiki/Tyto_alba)), publicados con licencia [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.es). El origen taíno de la palabra está tomado de la entrada [*guacamayo*](https://dle.rae.es/guacamayo) del *Diccionario de la lengua española*, que recoge *guacamaya* como sinónimo.
+Las descripciones de la guía de campo se basan en artículos de Wikipedia en español ([*Quiscalus mexicanus*](https://es.wikipedia.org/wiki/Quiscalus_mexicanus), [*Coragyps atratus*](https://es.wikipedia.org/wiki/Coragyps_atratus), [*Ara macao*](https://es.wikipedia.org/wiki/Ara_macao), [*Tyto alba*](https://es.wikipedia.org/wiki/Tyto_alba), [*Corvus corax*](https://es.wikipedia.org/wiki/Corvus_corax) y [«El cuervo (poema)»](https://es.wikipedia.org/wiki/El_cuervo_(poema))), publicados con licencia [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.es). El origen taíno de la palabra está tomado de la entrada [*guacamayo*](https://dle.rae.es/guacamayo) del *Diccionario de la lengua española*, que recoge *guacamaya* como sinónimo.
