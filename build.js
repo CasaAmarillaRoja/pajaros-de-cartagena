@@ -8,7 +8,7 @@ import { PNG } from 'pngjs';
 import species from "./src/species.js";
 
 // Path constants
-const BUILD_CACHE_PATH = "./build-cache.json";
+const PACKAGE_JSON_PATH = "./package.json";
 const SRC_DIR = "./src";
 const SPRITES_DIR = "./sprites";
 const BIRDS_DIR = SPRITES_DIR + "/birds";
@@ -30,6 +30,7 @@ const OBSIDIAN_ENTRY = SRC_DIR + "/platforms/obsidian/obsidian.js";
 
 const BROWSER_MANIFEST = SRC_DIR + "/platforms/extension/manifest.json";
 const OBSIDIAN_MANIFEST = SRC_DIR + "/platforms/obsidian/manifest.json";
+const ROOT_MANIFEST = "./manifest.json";
 const USERSCRIPT_HEADER = SRC_DIR + "/platforms/userscript/header.txt";
 const OBSIDIAN_WRAPPER = SRC_DIR + "/platforms/obsidian/wrapper.js";
 
@@ -46,34 +47,8 @@ const FEATHER_PIXELS_KEY = "__FEATHER_PIXELS__";
 const HAT_PIXELS_KEY = "__HAT_PIXELS__";
 const SPECIES_PALETTES_KEY = "__SPECIES_PALETTES__";
 
-/** @type {Record<string, any>} */
-let buildCache = {};
-try {
-	const cacheContent = readFileSync(BUILD_CACHE_PATH, 'utf8');
-	buildCache = JSON.parse(cacheContent);
-} catch (e) {
-	console.warn("No build cache found, starting fresh");
-}
-
-const now = new Date();
-const versionDate = `${now.getFullYear()}.${now.getMonth() + 1}.${now.getDate()}`;
-
-// Get current build number from the build cache
-let buildNumber = 0;
-
-if (buildCache.version && buildCache.version.startsWith(versionDate)) {
-	// Same day, increment build number
-	const parts = buildCache.version.split('.');
-	if (parts.length === 4) {
-		buildNumber = parseInt(parts[3], 10) + 1;
-	}
-}
-
-const version = `${versionDate}`;
-
-// Update build cache
-buildCache.version = version;
-writeFileSync(BUILD_CACHE_PATH, JSON.stringify(buildCache), 'utf8');
+// The release version comes from package.json (x.y.z, as Obsidian requires)
+const version = JSON.parse(readFileSync(PACKAGE_JSON_PATH, 'utf8')).version;
 
 /**
  * @param {string} entryPoint
@@ -327,6 +302,8 @@ async function buildObsidian() {
 	let obsidianManifest = readFileSync(OBSIDIAN_MANIFEST, 'utf8');
 	obsidianManifest = obsidianManifest.replace(/"version":\s*".*"/, `"version": "${version}"`);
 	writeFileSync(OBSIDIAN_DIR + '/manifest.json', obsidianManifest);
+	// Obsidian reads the manifest in the repository root to find releases
+	writeFileSync(ROOT_MANIFEST, obsidianManifest);
 }
 
 console.log("Starting build...");

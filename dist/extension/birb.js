@@ -2568,7 +2568,7 @@
 			}),
 			new Separator(),
 			new MenuItem(() => `Código fuente${isPetBoostActive() ? " ❤" : ""}`, () => { window.open("https://github.com/CasaAmarillaRoja/pajaros-de-cartagena"); }),
-			new MenuItem("Versión 2026.9.25", () => { alert("¡Gracias por usar Pájaros de Cartagena! Tienes la versión 2026.9.25."); }, undefined, false),
+			new MenuItem("Versión 1.0.0", () => { alert("¡Gracias por usar Pájaros de Cartagena! Tienes la versión 1.0.0."); }, undefined, false),
 		];
 
 		/** @type {Birb} */

@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Pájaros de Cartagena
 // @namespace    https://github.com/CasaAmarillaRoja
-// @version      2026.9.25
+// @version      1.0.0
 // @description  Pájaros de Cartagena que revolotean por tu navegador. Basado en Pocket Bird, de Idrees Hassan.
 // @author       CasaAmarillaRoja (basado en Pocket Bird, de Idrees Hassan)
 // @downloadURL  https://github.com/CasaAmarillaRoja/pajaros-de-cartagena/raw/refs/heads/main/dist/userscript/birb.user.js
@@ -2563,7 +2563,7 @@
 			}),
 			new Separator(),
 			new MenuItem(() => `Código fuente${isPetBoostActive() ? " ❤" : ""}`, () => { window.open("https://github.com/CasaAmarillaRoja/pajaros-de-cartagena"); }),
-			new MenuItem("Versión 2026.9.25", () => { alert("¡Gracias por usar Pájaros de Cartagena! Tienes la versión 2026.9.25."); }, undefined, false),
+			new MenuItem("Versión 1.0.0", () => { alert("¡Gracias por usar Pájaros de Cartagena! Tienes la versión 1.0.0."); }, undefined, false),
 		];
 
 		/** @type {Birb} */

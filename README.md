@@ -28,21 +28,21 @@ Cuatro pájaros de Cartagena de Indias, dibujados píxel a píxel, que saltan y 
 Todavía no está en el directorio de complementos de Obsidian, así que se instala a mano:
 
 1. Dentro de tu bóveda, crea la carpeta `.obsidian/plugins/pajaros-de-cartagena`.
-2. Copia en ella los archivos `main.js` y `manifest.json` de [`dist/obsidian`](dist/obsidian).
+2. Copia en ella los archivos `main.js` y `manifest.json` de la [última versión publicada](https://github.com/CasaAmarillaRoja/pajaros-de-cartagena/releases/latest). También están en [`dist/obsidian`](dist/obsidian).
 3. Reinicia Obsidian, ve a los ajustes de complementos de la comunidad y activa «Pájaros de Cartagena».
 
 Si tienes instalado el Pocket Bird original, desactívalo para no tener dos pájaros a la vez.
 
 ### Chrome y Edge
 
-1. Descarga este repositorio y descomprímelo.
+1. Descarga `extension.zip` de la [última versión publicada](https://github.com/CasaAmarillaRoja/pajaros-de-cartagena/releases/latest) y descomprímelo.
 2. Abre `chrome://extensions` (en Edge, `edge://extensions`) y activa el modo de desarrollador.
-3. Carga la extensión sin empaquetar y elige la carpeta `dist/extension`.
+3. Carga la extensión sin empaquetar y elige la carpeta que acabas de descomprimir.
 
 ### Firefox
 
 1. Abre `about:debugging#/runtime/this-firefox`.
-2. Carga un complemento temporal y elige el archivo `dist/extension/manifest.json`.
+2. Carga un complemento temporal y elige el archivo `manifest.json` de la carpeta de `extension.zip` descomprimida.
 
 Firefox lo retira al cerrarse. Para dejarlo instalado de forma permanente hay que firmarlo antes en addons.mozilla.org.
 

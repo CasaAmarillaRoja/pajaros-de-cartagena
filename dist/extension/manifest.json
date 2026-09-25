@@ -2,7 +2,7 @@
     "manifest_version": 3,
     "name": "Pájaros de Cartagena",
     "description": "Pájaros de Cartagena que revolotean por tu navegador. Basado en Pocket Bird, de Idrees Hassan.",
-    "version": "2026.9.25",
+    "version": "1.0.0",
     "homepage_url": "https://github.com/CasaAmarillaRoja/pajaros-de-cartagena",
     "icons": {
         "48": "images/icons/transparent/48x48x1.png",
